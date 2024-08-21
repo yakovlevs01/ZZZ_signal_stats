@@ -106,7 +106,7 @@ def extract_url_from_datafile(game_path: Path | str) -> str:
                 url = line.split("\0")[0]
                 res = requests.get(url, timeout=5)
 
-                if res.status_code == 200:
+                if res.status_code == 200:  # noqa: PLR2004
                     print(url)
                     uri = urlparse(url)
                     query = parse_qs(uri.query)
@@ -181,8 +181,6 @@ def main() -> list:
             page += 1
             time.sleep(0.2)
     return all_gacha_logs
-    # clear_logs = all_gacha_logs.drop(columns=["lang", "id", "count", "gacha_id", "uid"])
-    # clear_logs.to_excel("zzz_logs.xlsx")
 
 
 if __name__ == "__main__":

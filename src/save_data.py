@@ -8,7 +8,7 @@ def clear_data(df: pd.DataFrame) -> pd.DataFrame:
 
 
 if __name__ == "__main__":
-    d = main()
-    df = pd.DataFrame(d)
-    df = clear_data(df)
-    df.to_excel("ZZZ_import.xlsx")
+    raw_signal_data = main()
+    signal_data_df = pd.DataFrame(raw_signal_data)
+    signal_data_df = clear_data(signal_data_df)
+    signal_data_df.to_excel("ZZZ_import.xlsx")
