@@ -119,10 +119,10 @@ def extract_url_from_datafile(game_path: Path | str) -> str:
                         "lang",
                         "plat_type",
                         "region",
-                        "page",
-                        "size",
-                        "real_gacha_type",
-                        "end_id",
+                        # "page",
+                        # "size",
+                        # "real_gacha_type",
+                        # "end_id",
                     ]
                     filtered_query = {key: query[key] for key in query if key in required_keys}
 
