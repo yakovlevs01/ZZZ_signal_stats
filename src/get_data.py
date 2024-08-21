@@ -1,5 +1,6 @@
 import re
 import subprocess
+import time
 from pathlib import Path
 from urllib.parse import parse_qs, urlencode, urlparse
 
@@ -33,7 +34,9 @@ def copy_used_file(cache_path: str, copy_path: str) -> None:
         print(f"Error occurred: {e}")
 
 
-def locate_game_path(set_path: str = "") -> str:
+def locate_game_path(
+    set_path: str = "C:/GAMES/Hoyoverse/HoYoPlay/games/ZenlessZoneZero Game/ZenlessZoneZero_Data/",
+) -> str:
     if set_path:
         return set_path
 
@@ -126,8 +129,6 @@ def extract_url_from_datafile(game_path: Path | str) -> str:
                     latest_url = f"{uri.scheme}://{uri.netloc}{uri.path}?" + urlencode(filtered_query, doseq=True)
                     print(latest_url)
                     print("Search History Url Found!")
-                    # pyperclip.copy(latest_url)
-                    # print("Search History Url has been saved to clipboard.")
                     return latest_url
 
     raise LogFileNotFoundError(f"Could not find Seach History Url in {cache_path}.")
@@ -156,3 +157,33 @@ def get_gacha_log(
         return None
     data = items  # temp_df = pd.DataFrame(items)
     return data, items[-1]["id"]
+
+
+def main() -> list:
+    game_path = locate_game_path()
+    url = extract_url_from_datafile(game_path)
+
+    all_gacha_logs = []
+
+    gacha_types = {"standart": 1, "event": 2, "weapon": 3, "idk": 4, "banbu": 5}
+
+    for gacha_type in gacha_types.values():
+        page = 1
+        end_id = None
+
+        while True:
+            result = get_gacha_log(url, page=page, size=20, end_id=end_id, gacha_type=gacha_type)
+            if not result:
+                break
+            temp_df, end_id = result
+
+            all_gacha_logs += temp_df
+            page += 1
+            time.sleep(0.2)
+    return all_gacha_logs
+    # clear_logs = all_gacha_logs.drop(columns=["lang", "id", "count", "gacha_id", "uid"])
+    # clear_logs.to_excel("zzz_logs.xlsx")
+
+
+if __name__ == "__main__":
+    print(main())
