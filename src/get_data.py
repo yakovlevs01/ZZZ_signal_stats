@@ -5,7 +5,7 @@ from urllib.parse import parse_qs, urlencode, urlparse
 
 import requests
 
-from exceptions import InvalidDataError, LogFileNotFoundError
+from exceptions import HoYoAPIError, InvalidDataError, LogFileNotFoundError
 
 
 def read_log_file(file_path: Path, num_lines: int = 4) -> list[str]:
@@ -131,3 +131,28 @@ def extract_url_from_datafile(game_path: Path | str) -> str:
                     return latest_url
 
     raise LogFileNotFoundError(f"Could not find Seach History Url in {cache_path}.")
+
+
+def get_gacha_log(
+    url: str,
+    page: int = 1,
+    size: int = 20,
+    end_id: int | None = None,
+    gacha_type: int = 2,
+) -> tuple[list, int]:
+    current_url = f"{url}&page={page}&size={size}&real_gacha_type={gacha_type}"
+    if end_id:
+        current_url += f"&end_id={end_id}"
+
+    response = requests.get(current_url, timeout=5)
+    response_data = response.json()
+
+    if response_data["retcode"] != 0:
+        raise HoYoAPIError(f"Error from HoYo API:\n {response_data['message']}")
+
+    items = response_data["data"]["list"]
+    if not items:
+        print(f"Got everything from {gacha_type}")
+        return None
+    data = items  # temp_df = pd.DataFrame(items)
+    return data, items[-1]["id"]
