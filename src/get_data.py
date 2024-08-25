@@ -157,8 +157,7 @@ def get_gacha_log(
     if not items:
         print(f"Got everything from {gacha_type}")
         return None
-    data = items  # temp_df = pd.DataFrame(items)
-    return data, items[-1]["id"]
+    return items, items[-1]["id"]
 
 
 def get_everything() -> list:
