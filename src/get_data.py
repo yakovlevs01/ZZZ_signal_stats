@@ -36,7 +36,7 @@ def copy_used_file(cache_path: str, copy_path: str) -> None:
 
 
 def locate_game_path(
-    set_path: str,
+    set_path: str = "",
 ) -> str:
     if set_path:
         return set_path
@@ -189,14 +189,9 @@ def get_whole_gacha_data_by_type(url: str, gacha_type: str) -> list:
 def init() -> tuple:
     env_file_path = Path.cwd() / ".env"
 
-    if env_file_path.exists():
-        zzz_game_path = get_key(str(env_file_path), "ZZZ_GAME_PATH")
-        url = get_key(str(env_file_path), "API_URL")
-    else:
-        zzz_game_path = locate_game_path()
-        url = extract_url_from_datafile(zzz_game_path)
-        set_key(str(env_file_path), "ZZZ_GAME_PATH", str(zzz_game_path))
-        set_key(str(env_file_path), "API_URL", str(url))
+    zzz_game_path = get_key(str(env_file_path), "ZZZ_GAME_PATH") if env_file_path.exists() else locate_game_path()
+    url = extract_url_from_datafile(zzz_game_path)
+    set_key(str(env_file_path), "ZZZ_GAME_PATH", str(zzz_game_path))
 
     return zzz_game_path, url
 
@@ -205,4 +200,4 @@ gacha_types = {"standart": 1, "event": 2, "weapon": 3, "idk": 4, "banbu": 5}
 zzz_game_path, url = init()
 
 if __name__ == "__main__":
-    print(get_everything())
+    pass
