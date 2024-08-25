@@ -2,23 +2,17 @@ import json
 import sqlite3
 from pathlib import Path
 
-from get_data import get_whole_gacha_data_by_type, init
-from process_data import calculate_pity
 
-game_path, url = init()
-gacha_types = {"standart": 1, "event": 2, "weapon": 3, "idk": 4, "banbu": 5}
-
-
-def save_extra_info(gacha_type: str, **kwargs) -> None:  # noqa: ANN003
+def save_extra_info(gacha_type: str, info: dict) -> None:
     file_path = Path(f"extra_info_{gacha_type}.json")
     with file_path.open(mode="w", encoding="utf-8") as json_file:
-        json.dump(kwargs, json_file, indent=4)
+        json.dump(info, json_file, indent=4)
 
 
-def save_logs_to_db(gacha_type: str) -> None:
-    raw_signal_data = get_whole_gacha_data_by_type(url, gacha_type)
-    signal_data, s_pity, a_pity = calculate_pity(raw_signal_data)
-    save_extra_info(gacha_type, s_pity=s_pity, a_pity=a_pity)
+def save_logs_to_db(gacha_type: str, signal_data: list, extra_info: dict) -> None:
+    if extra_info:
+        save_extra_info(gacha_type, extra_info)
+
     try:
         conn = sqlite3.connect(f"logs_{gacha_type}.db")
         cursor = conn.cursor()
@@ -104,3 +98,12 @@ def read_db(gacha_type: str) -> list[dict]:
             cursor.close()
         if conn:
             conn.close()
+
+
+def read_extra_info(gacha_type: str) -> dict:
+    file_path = Path(f"extra_info_{gacha_type}.json")
+    if not file_path.exists():
+        raise FileNotFoundError(f"The file {file_path} does not exist.")
+
+    with file_path.open(encoding="utf-8") as json_file:
+        return json.load(json_file)
