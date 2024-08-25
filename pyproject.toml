@@ -24,6 +24,7 @@ build-backend = "hatchling.build"
 managed = true
 dev-dependencies = [
     "ruff>=0.6.1",
+    "pre-commit>=3.8.0",
 ]
 
 [tool.hatch.metadata]
@@ -34,7 +35,6 @@ packages = ["src/zzz_signal_stats"]
 
 [tool.ruff]
 fix = true
-unsafe-fixes = true
 line-length = 120
 extend-include = ["*.ipynb"]
 select = ["ALL"]
