@@ -24,9 +24,10 @@ def calculate_pity(data: list[dict]) -> list[dict]:
     return local_data, s_rank_counter, a_rank_counter
 
 
+gacha_types = {"standart": 1, "event": 2, "weapon": 3, "idk": 4, "banbu": 5}
+
 if __name__ == "__main__":
     game_path, url = init()
-    gacha_types = {"standart": 1, "event": 2, "weapon": 3, "idk": 4, "banbu": 5}
     for g_type in gacha_types:
         raw_signal_data = get_whole_gacha_data_by_type(url, g_type)
         signal_data, s_pity, a_pity = calculate_pity(raw_signal_data)

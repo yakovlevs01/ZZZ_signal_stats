@@ -10,8 +10,7 @@ game_path, url = init()
 
 @app.get("/data/{gacha_type}")
 async def get_data(gacha_type: str) -> dict:
-    g_type = gacha_types[gacha_type]
-    raw_signal_data = get_whole_gacha_data_by_type(url, g_type)
+    raw_signal_data = get_whole_gacha_data_by_type(url, gacha_type)
     signal_data, s_pity, a_pity = calculate_pity(raw_signal_data)
 
     return {"data": signal_data, "s_pity": s_pity, "a_pity": a_pity}
