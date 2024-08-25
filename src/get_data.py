@@ -5,6 +5,7 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlencode, urlparse
 
 import requests
+from dotenv import get_key, set_key
 
 from exceptions import HoYoAPIError, InvalidDataError, LogFileNotFoundError
 
@@ -35,7 +36,7 @@ def copy_used_file(cache_path: str, copy_path: str) -> None:
 
 
 def locate_game_path(
-    set_path: str = "C:/GAMES/Hoyoverse/HoYoPlay/games/ZenlessZoneZero Game/ZenlessZoneZero_Data/",
+    set_path: str,
 ) -> str:
     if set_path:
         return set_path
@@ -159,29 +160,49 @@ def get_gacha_log(
     return data, items[-1]["id"]
 
 
-def main() -> list:
-    game_path = locate_game_path()
-    url = extract_url_from_datafile(game_path)
-
+def get_everything() -> list:
     all_gacha_logs = []
 
-    gacha_types = {"standart": 1, "event": 2, "weapon": 3, "idk": 4, "banbu": 5}
-
-    for gacha_type in gacha_types.values():
-        page = 1
-        end_id = None
-
-        while True:
-            result = get_gacha_log(url, page=page, size=20, end_id=end_id, gacha_type=gacha_type)
-            if not result:
-                break
-            temp_df, end_id = result
-
-            all_gacha_logs += temp_df
-            page += 1
-            time.sleep(0.2)
+    for gacha_type in gacha_types:
+        all_gacha_logs += get_whole_gacha_data_by_type(url, gacha_type)
     return all_gacha_logs
 
 
+def get_whole_gacha_data_by_type(url: str, gacha_type: str) -> list:
+    assert gacha_type in gacha_types
+
+    all_gacha_logs = []
+    page = 1
+    end_id = None
+    while True:
+        result = get_gacha_log(url, page=page, size=20, end_id=end_id, gacha_type=gacha_type)
+        if not result:
+            break
+        temp_df, end_id = result
+
+        all_gacha_logs += temp_df
+        page += 1
+        time.sleep(0.2)
+    return all_gacha_logs
+
+
+def init() -> tuple:
+    env_file_path = Path.cwd() / ".env"
+
+    if env_file_path.exists():
+        zzz_game_path = get_key(str(env_file_path), "ZZZ_GAME_PATH")
+        url = get_key(str(env_file_path), "API_URL")
+    else:
+        zzz_game_path = locate_game_path()
+        url = extract_url_from_datafile(zzz_game_path)
+        set_key(str(env_file_path), "ZZZ_GAME_PATH", str(zzz_game_path))
+        set_key(str(env_file_path), "API_URL", str(url))
+
+    return zzz_game_path, url
+
+
+gacha_types = {"standart": 1, "event": 2, "weapon": 3, "idk": 4, "banbu": 5}
+zzz_game_path, url = init()
+
 if __name__ == "__main__":
-    print(main())
+    print(get_everything())
