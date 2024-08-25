@@ -33,10 +33,10 @@ allow-direct-references = true
 [tool.hatch.build.targets.wheel]
 packages = ["src/zzz_signal_stats"]
 
-[tool.ruff]
-fix = true
-line-length = 120
-extend-include = ["*.ipynb"]
+[tool.ruff.lint]
 select = ["ALL"]
 ignore = ["EM", "FBT", "TRY003", "S101", "D", "FA", "ANN101", "T201"]
+
+fixable = ["ALL"]
+line-length = 120
 pydocstyle.convention = "google"
