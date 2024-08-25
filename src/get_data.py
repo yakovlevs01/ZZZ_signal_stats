@@ -197,7 +197,6 @@ def init() -> tuple:
 
 
 gacha_types = {"standart": 1, "event": 2, "weapon": 3, "idk": 4, "banbu": 5}
-zzz_game_path, url = init()
 
 if __name__ == "__main__":
-    pass
+    zzz_game_path, url = init()
