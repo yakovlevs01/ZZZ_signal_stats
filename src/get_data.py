@@ -140,9 +140,10 @@ def get_gacha_log(
     page: int = 1,
     size: int = 20,
     end_id: int | None = None,
-    gacha_type: int = 2,
+    gacha_type: str = "standart",
 ) -> tuple[list, int]:
-    current_url = f"{url}&page={page}&size={size}&real_gacha_type={gacha_type}"
+    assert gacha_type in gacha_types
+    current_url = f"{url}&page={page}&size={size}&real_gacha_type={gacha_types[gacha_type]}"
     if end_id:
         current_url += f"&end_id={end_id}"
 
