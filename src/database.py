@@ -31,7 +31,7 @@ def save_logs_to_db(gacha_type: str, signal_data: list) -> None:
         )
         """)
 
-        for entry in reversed(signal_data):
+        for entry in signal_data:
             cursor.execute(
                 """
             SELECT time FROM gacha_data WHERE id = ?
