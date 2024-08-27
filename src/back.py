@@ -33,4 +33,4 @@ async def save_full_data() -> None:
         raw_signal_data = get_whole_gacha_data_by_type(url, gacha_type)
         signal_data, s_pity, a_pity = calculate_pity(raw_signal_data)
         save_logs_to_db(gacha_type, signal_data)
-        save_extra_info({"s_pity": s_pity, "a_pity": a_pity})
+        save_extra_info(gacha_type, {"s_pity": s_pity, "a_pity": a_pity})

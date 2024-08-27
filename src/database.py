@@ -9,10 +9,7 @@ def save_extra_info(gacha_type: str, info: dict) -> None:
         json.dump(info, json_file, indent=4)
 
 
-def save_logs_to_db(gacha_type: str, signal_data: list, extra_info: dict) -> None:
-    if extra_info:
-        save_extra_info(gacha_type, extra_info)
-
+def save_logs_to_db(gacha_type: str, signal_data: list) -> None:
     try:
         conn = sqlite3.connect(f"logs_{gacha_type}.db")
         cursor = conn.cursor()
