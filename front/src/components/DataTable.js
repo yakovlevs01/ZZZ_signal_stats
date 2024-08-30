@@ -1,19 +1,19 @@
 import React, { useEffect, useState, useRef } from 'react';
-
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.min.css';
+import { getRowStyle } from './rowStyles'; // Import the row styles
 
 function DataTable() {
     const [rowData, setRowData] = useState([]);
     const [columnDefs] = useState([
-        { headerName: "ID", field: "id" },
-        { headerName: "Name", field: "name" },
-        { headerName: "Item Type", field: "item_type" },
-        { headerName: "Count", field: "count" },
-        { headerName: "Rank Type", field: "rank_type" },
-        { headerName: "Pity", field: "pity" },
-        { headerName: "Time", field: "time" },
+        { field: "id", headerName: "ID" },
+        { field: "name", headerName: "Name" },
+        { field: "item_type", headerName: "Item Type" },
+        { field: "count", headerName: "Count" },
+        { field: "rank_type", headerName: "Rank Type" },
+        { field: "pity", headerName: "Pity" },
+        { field: "time", headerName: "Time" },
         // Add more columns as needed
     ]);
 
@@ -42,12 +42,13 @@ function DataTable() {
         <div
             ref={gridRef}
             className="ag-theme-alpine-dark"
-            style={{ height: 800, width: 1700 }}
+            style={{ height: 800, width: 1500 }}
         >
             <AgGridReact
                 rowData={rowData}
-                columnDefs={columnDefs}>
-            </AgGridReact>
+                columnDefs={columnDefs}
+                getRowStyle={getRowStyle}
+            />
         </div>
     );
 }
