@@ -27,12 +27,12 @@ function DataTable() {
                     setRowData(data.data);
                 } else {
                     console.error('Data format is incorrect:', data);
-                    setRowData([]); // Fallback to an empty array if data is not as expected
+                    setRowData([]);
                 }
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
-                setRowData([]); // Fallback to an empty array on error
+                setRowData([]);
             });
     }, []);
 
@@ -42,13 +42,14 @@ function DataTable() {
 
     const onFirstDataRendered = (params) => {
         params.api.autoSizeAllColumns();
+        params.api.setGridOption("domLayout", "print")
     };
 
     return (
         <div
             ref={gridRef}
             className="ag-theme-alpine-dark"
-            style={{ height: 800 }}
+            style={{ height: 800, width: "" }}
         >
             <AgGridReact
                 rowData={rowData}
