@@ -36,18 +36,26 @@ function DataTable() {
             });
     }, []);
 
+    const onGridReady = (params) => {
+        params.api.sizeColumnsToFit();
+    };
 
+    const onFirstDataRendered = (params) => {
+        params.api.autoSizeAllColumns();
+    };
 
     return (
         <div
             ref={gridRef}
             className="ag-theme-alpine-dark"
-            style={{ height: 800, width: 1500 }}
+            style={{ height: 800 }}
         >
             <AgGridReact
                 rowData={rowData}
                 columnDefs={columnDefs}
                 getRowStyle={getRowStyle}
+                onGridReady={onGridReady}
+                onFirstDataRendered={onFirstDataRendered}
             />
         </div>
     );
