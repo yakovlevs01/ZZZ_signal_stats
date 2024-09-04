@@ -75,7 +75,7 @@ def read_db(gacha_type: str) -> list[dict]:
     try:
         conn = sqlite3.connect(f"logs_{gacha_type}.db")
         cursor = conn.cursor()
-        query = "SELECT * FROM gacha_data"
+        query = "SELECT * FROM gacha_data ORDER BY id DESC"
         cursor.execute(query)
 
         rows = cursor.fetchall()
