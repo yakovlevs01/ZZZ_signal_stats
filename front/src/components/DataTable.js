@@ -9,16 +9,21 @@ function DataTable({ data, endpoint }) {
 
     const columnDefs = useMemo(() => {
         const baseColumns = [
-            { field: "id", headerName: "ID" },
-            { field: "time", headerName: "Time" },
-            { field: "name", headerName: "Name" },
-            { field: "rank_type", headerName: "Rank Type" },
-            { field: "pity", headerName: "Pity" },
-            { field: "item_type", headerName: "Item Type" },
+            { field: "id", headerName: "ID", floatingFilter: true, filter: true },
+            { field: "time", headerName: "Time", floatingFilter: true, filter: true },
+            { field: "name", headerName: "Name", floatingFilter: true, filter: true },
+            { field: "rank_type", headerName: "Rank Type", floatingFilter: true, filter: 'agSetColumnFilter' },
+            { field: "pity", headerName: "Pity", floatingFilter: true, filter: true },
+            { field: "item_type", headerName: "Item Type", floatingFilter: true, filter: true },
         ];
 
         return baseColumns;
     }, [endpoint]);
+
+    const defaultColDef = useMemo(() => ({
+        sortable: true,
+        resizable: true,
+    }), []);
 
     const onGridReady = (params) => {
         params.api.sizeColumnsToFit();
@@ -38,6 +43,7 @@ function DataTable({ data, endpoint }) {
             <AgGridReact
                 rowData={data ? data.data : []}
                 columnDefs={columnDefs}
+                defaultColDef={defaultColDef}
                 getRowStyle={getRowStyle}
                 onGridReady={onGridReady}
                 onFirstDataRendered={onFirstDataRendered}
